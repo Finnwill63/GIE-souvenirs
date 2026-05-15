@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Souvenir Guide — Helsinki, Tallinn, Stockholm</title>
+<style>
+  :root {
+    --navy: #13294B;
+    --blue: #4B9CD3;
+    --amber: #E8A020;
+    --cream: #faf6ef;
+    --ink: #1a1a1a;
+    --muted: #5a6470;
+    --line: #e3dccf;
+    --finland: #003580;
+    --estonia: #0072CE;
+    --sweden: #006AA7;
+    --forest: #2d4a2d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  header {
+    background: var(--navy);
+    color: white;
+    padding: 40px 32px 28px;
+    text-align: center;
+  }
+  header h1 {
+    margin: 0 0 6px;
+    font-size: 2rem;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
+  header .sub {
+    color: #c8d4e3;
+    font-size: 1rem;
+    margin: 0 0 10px;
+  }
+  header .meta {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  header .pill {
+    background: var(--amber);
+    color: var(--navy);
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  /* Tabs */
+  .tabs {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    gap: 4px;
+    margin-top: -1px;
+    position: sticky;
+    top: 0;
+    background: var(--cream);
+    z-index: 10;
+    padding-top: 16px;
+    padding-bottom: 4px;
+  }
+  .tab {
+    flex: 1;
+    background: white;
+    border: 1px solid var(--line);
+    border-bottom: none;
+    padding: 14px 12px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--muted);
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+  .tab:hover { background: #fff8e8; color: var(--navy); }
+  .tab.active {
+    background: white;
+    color: var(--navy);
+    box-shadow: 0 -2px 0 var(--amber) inset;
+    cursor: default;
+  }
+  .tab .flag { display: inline-block; margin-right: 6px; font-size: 1.1em; }
+  .tab .city { display: block; font-size: 0.95rem; }
+  .tab .dates { display: block; font-size: 0.72rem; color: var(--muted); font-weight: 400; margin-top: 2px; }
+  .tab.active .dates { color: var(--muted); }
+
+  main {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+    background: white;
+    border: 1px solid var(--line);
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    padding-top: 24px;
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .city-intro {
+    background: var(--cream);
+    border-left: 4px solid var(--amber);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    border-radius: 4px;
+  }
+  .city-intro p { margin: 0 0 6px; color: var(--ink); font-size: 0.95rem; }
+  .city-intro p:last-child { margin-bottom: 0; }
+  .city-intro strong { color: var(--navy); }
+
+  .anchor {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .anchor strong { color: var(--navy); }
+
+  .item {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .item h2 {
+    margin: 0;
+    color: var(--navy);
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+  .price {
+    color: var(--amber);
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+  .desc {
+    color: var(--ink);
+    margin: 0 0 12px;
+    font-size: 0.95rem;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .tag {
+    background: #eef2f7;
+    color: var(--navy);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.72rem;
+    font-weight: 500;
+  }
+  .tag.gift { background: #fdf0d8; color: #8a5a00; }
+  .tag.self { background: #e3edf5; color: var(--navy); }
+
+  .location {
+    background: var(--cream);
+    border-left: 3px solid var(--blue);
+    padding: 9px 12px;
+    border-radius: 3px;
+    font-size: 0.88rem;
+  }
+  .location strong {
+    color: var(--navy);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .location .walk {
+    color: var(--muted);
+    font-size: 0.82rem;
+    margin-top: 3px;
+  }
+
+  /* Section dividers per city */
+  .section-divider {
+    margin: 32px 0 16px;
+    padding: 16px 20px;
+    color: white;
+    border-radius: 6px;
+  }
+  .section-divider h3 { margin: 0 0 4px; font-size: 1.25rem; font-weight: 600; }
+  .section-divider p { margin: 0; font-size: 0.9rem; opacity: 0.9; }
+  .haltia-section { background: linear-gradient(135deg, #2d4a2d 0%, #1d3a1d 100%); }
+  .haltia-section p { color: #c9dcc9; }
+
+  .item.haltia { border-left: 4px solid var(--forest); }
+  .item.haltia h2 { color: var(--forest); }
+  .item.haltia .location { border-left-color: var(--forest); }
+  .item.haltia .location strong { color: var(--forest); }
+
+  .tip {
+    background: #fff8e8;
+    border: 1px solid #f0d99a;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-top: 20px;
+    font-size: 0.92rem;
+  }
+  .tip strong { color: var(--navy); }
+  .avoid {
+    background: #fdf0ed;
+    border: 1px solid #e8b8ad;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-top: 10px;
+    font-size: 0.92rem;
+  }
+  .avoid strong { color: #a83c2a; }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.82rem;
+    padding: 20px;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 600px) {
+    .tab { padding: 10px 6px; font-size: 0.85rem; }
+    .tab .city { font-size: 0.85rem; }
+    main { padding: 20px 16px 40px; }
+    .item { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Souvenir Guide</h1>
+  <p class="sub">Authentic, durable, non-food picks for 20-year-olds · €10–40 range</p>
+  <div class="meta">
+    <span class="pill">🇫🇮 Helsinki</span>
+    <span class="pill">🇪🇪 Tallinn</span>
+    <span class="pill">🇸🇪 Stockholm</span>
+  </div>
+</header>
+
+<div class="tabs" role="tablist">
+  <div class="tab active" role="tab" data-panel="helsinki" onclick="showPanel('helsinki')">
+    <span class="flag">🇫🇮</span><span class="city">Helsinki</span>
+  </div>
+  <div class="tab" role="tab" data-panel="tallinn" onclick="showPanel('tallinn')">
+    <span class="flag">🇪🇪</span><span class="city">Tallinn</span>
+  </div>
+  <div class="tab" role="tab" data-panel="stockholm" onclick="showPanel('stockholm')">
+    <span class="flag">🇸🇪</span><span class="city">Stockholm</span>
+  </div>
+</div>
+
+<main>
+
+<!-- ============ HELSINKI PANEL ============ -->
+<div class="panel active" id="helsinki">
+
+  <div class="city-intro">
+    <p><strong>Helsinki — Finnish design capital.</strong> Strong in iconic mid-century design (Marimekko, Iittala, Arabia), Moomin merchandise (a real cultural treasure, not just kitsch), and outdoor/forest-themed crafts.</p>
+    <p><strong>Legend:</strong> <span class="tag self">Self</span> = keeper • <span class="tag gift">Gift</span> = packs well for gifts</p>
+  </div>
+
+  <div class="anchor"><strong>📍 Anchor:</strong> Scandic Hub Helsinki, Annankatu 18. All shops within 5–15 min walk unless noted.</div>
+
+  <div class="item">
+    <div class="item-header"><h2>Marimekko Unikko tote bag</h2><span class="price">€25–40</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">The iconic red poppy print — instantly Finnish, instantly recognizable. Skip the €200 dresses; cotton totes are well within budget and get used for years.</p>
+    <div class="location">
+      <strong>Marimekko Kamppi — Urho Kekkosen katu 1</strong> · ~450 m / 5 min north
+      <div class="walk">Mon–Fri 10–20, Sat 10–19, Sun 12–18. Inside Kamppi mall.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Finnish safety reflector (heijastin)</h2><span class="price">€3–10</span></div>
+    <div class="tags"><span class="tag gift">Gift</span></div>
+    <p class="desc">Clip-on dangling reflector. Mandatory winter gear in Finland, baffling everywhere else. Cool designs (Moomin, geometric, neon). Cheap, light, packable — buy a handful as gifts.</p>
+    <div class="location">
+      <strong>Stockmann — Aleksanterinkatu 52</strong> · ~750 m / 9 min northeast
+      <div class="walk">Ground floor accessories. Also at Sokos and Moomin Shop.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Moomin enamel pin or patch set</h2><span class="price">€8–15</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Pins for jackets, patches for tote bags, sticker sheets for laptops. Cheaper than the mugs, easier to give to multiple friends.</p>
+    <div class="location">
+      <strong>Moomin Shop Lasipalatsi — Mannerheimintie 22–24</strong> · ~600 m / 7 min north
+      <div class="walk">Mon–Sat 10–19, Sun 11–18.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Iittala Aino Aalto tumbler (single)</h2><span class="price">€15–20</span></div>
+    <div class="tags"><span class="tag self">Self</span></div>
+    <p class="desc">Classic ribbed Finnish glass, designed 1932, still in production. Durable everyday drinkware. Clear, sea blue, grey, or amber.</p>
+    <div class="location">
+      <strong>Iittala & Arabia Store Esplanadi — Pohjoisesplanadi 23</strong> · ~900 m / 11 min east
+      <div class="walk">Mon–Fri 10–19, Sat 10–17, Sun 12–16. Sale section has discontinued colors at ~30% off.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Moomin mug (Arabia)</h2><span class="price">€25–30</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">The single most "ask me where I got this" gift from Finland. Ceramic, dishwasher-safe. Many character variants — Snufkin, Little My, Moominpappa.</p>
+    <div class="location">
+      <strong>Iittala & Arabia Store Esplanadi — Pohjoisesplanadi 23</strong> · ~900 m / 11 min east
+      <div class="walk">Better selection and prices than the Moomin Shop itself. Also at Stockmann.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Finnish wool socks</h2><span class="price">€15–25</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Thick wool socks Finns actually wear. Soft, durable, practical — a much better parent-gift than a fridge magnet.</p>
+    <div class="location">
+      <strong>Sokos — Mannerheimintie 9</strong> · ~650 m / 8 min north
+      <div class="walk">Mon–Fri 9–21, Sat 10–19, Sun 10–18. Look in basement/ground floor hosiery.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Kalevala Koru bronze pendant or earrings</h2><span class="price">€25–40</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Jewelry based on actual Iron Age and Viking-era finds from Finland and Karelia, reproduced in bronze. Women-founded, women-owned. (Princess Leia wore Kalevala pieces in <em>A New Hope</em>.)</p>
+    <div class="location">
+      <strong>Kalevala Flagship Store — Keskuskatu 3</strong> · ~650 m / 8 min northeast
+      <div class="walk">Mon–Fri 10–18, Sat 10–17, <strong>closed Sunday</strong>.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Sauna hat (saunahattu)</h2><span class="price">€20–35</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Felted wool hat worn in the sauna to keep your head cool. Genuinely Finnish, mildly absurd, durable. Great display piece on a dorm wall when not in use.</p>
+    <div class="location">
+      <strong>Stockmann — Aleksanterinkatu 52</strong> · ~750 m / 9 min northeast
+      <div class="walk">Sauna/home section. Also at Sokos.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Marimekko notebook or pencil case</h2><span class="price">€12–25</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Same iconic prints, lower price. Flat, easy to pack in quantity for siblings or study-buddies.</p>
+    <div class="location">
+      <strong>Marimekko Kamppi — Urho Kekkosen katu 1</strong> · ~450 m / 5 min north
+      <div class="walk">Look for the "Kiosk" small-goods section.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Lapuan Kankurit linen/wool towel</h2><span class="price">€25–40</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Handwoven small linen sauna towel from a 100-year-old Finnish mill. Folds flat, far more distinctive than department-store towels. Great parent/grandparent gift.</p>
+    <div class="location">
+      <strong>Lapuan Kankurit Store & Studio — Katariinankatu 2</strong> · ~1.4 km / 17 min east
+      <div class="walk">Mon–Fri 11–18, Sat 10–16, closed Sun. Combine with Esplanadi shopping.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Postcards & art prints</h2><span class="price">€2–15</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Tove Jansson Moomin art, vintage Finnair travel posters, Helsinki design postcards. Cheap, flat, perfect for dorm walls.</p>
+    <div class="location">
+      <strong>Akateeminen Kirjakauppa — Pohjoisesplanadi 39</strong> · ~850 m / 10 min east
+      <div class="walk">Iconic Alvar Aalto-designed bookstore. Worth visiting just for the building.</div>
+    </div>
+  </div>
+
+  <!-- HALTIA -->
+  <div class="section-divider haltia-section">
+    <h3>🌲 If you're visiting Nuuksio: the Haltia Shop</h3>
+    <p>The Finnish Nature Centre at the edge of Nuuksio National Park. Bus 245(A) from Espoo Centre, ~30 min drive from Helsinki. Free entry to shop, lobby, café.</p>
+  </div>
+
+  <div class="item haltia">
+    <div class="item-header"><h2>National Park sew-on badges</h2><span class="price">€4–8 each</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Embroidered patches for each of Finland's 40+ national parks. Sew onto a backpack — the Finnish hiker's version of a passport stamp. Start with Nuuksio.</p>
+    <div class="location"><strong>Haltia Shop — Nuuksiontie 84, Espoo</strong></div>
+  </div>
+
+  <div class="item haltia">
+    <div class="item-header"><h2>Finnish National Parks scratch map</h2><span class="price">~€20</span></div>
+    <div class="tags"><span class="tag self">Self</span></div>
+    <p class="desc">42×60 cm wall map with all 40 national parks under a scratch-off layer. Scratch each as you visit. 5% of sales fund national park development.</p>
+    <div class="location"><strong>Haltia Shop — Nuuksiontie 84, Espoo</strong></div>
+  </div>
+
+  <div class="item haltia">
+    <div class="item-header"><h2>Topographic hiking maps</h2><span class="price">€10–18</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Karttakeskus or Metsähallitus waterproof hiking maps for Nuuksio, Repovesi, Koli, etc. Even un-hiked, a beautiful object — frame-worthy.</p>
+    <div class="location"><strong>Haltia Shop — Nuuksiontie 84, Espoo</strong></div>
+  </div>
+
+  <div class="item haltia">
+    <div class="item-header"><h2>Local artisan crafts (kuksa, birch bark)</h2><span class="price">€10–40</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Hand-carved wooden cups (kuksa), birch bark items, juniper-wood spoons, beeswax candles, pine-tar soap. A real kuksa is the most "I went to a Finnish forest" object you can bring home.</p>
+    <div class="location"><strong>Haltia Shop — Nuuksiontie 84, Espoo</strong></div>
+  </div>
+
+  <div class="item haltia">
+    <div class="item-header"><h2>Suunto compass</h2><span class="price">€15–35</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Iconic Finnish compass company. A proper baseplate compass — durable, useful, Finnish provenance. Pairs with the topographic map.</p>
+    <div class="location"><strong>Haltia Shop — Nuuksiontie 84, Espoo</strong></div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 One-route plan:</strong> Walk east along Pohjoisesplanadi. In 15 min you hit Kamppi (Marimekko), Stockmann, Kalevala, Moomin Shop, Iittala/Arabia, and Akateeminen. Single loop covers 9 of 11 city items.
+  </div>
+  <div class="avoid">
+    <strong>⚠️ Skip:</strong> Reindeer-fur trinkets and "Lapland" novelty items near the railway station — mostly imported. Airport prices are ~2× downtown.
+  </div>
+</div>
+
+<!-- ============ TALLINN PANEL ============ -->
+<div class="panel" id="tallinn">
+
+  <div class="city-intro">
+    <p><strong>Tallinn — medieval craft city.</strong> Strong in handmade wool knitwear, linen, juniper woodcraft, and small-batch artisan work tucked into Old Town courtyards. The Old Town is dense with souvenir shops, but most are mass-produced imports. Look for the <strong>"Eesti Käsitöö"</strong> (Estonian Handicraft) label or buy directly from workshops at Masters' Courtyard / St. Catherine's Passage.</p>
+    <p><strong>Legend:</strong> <span class="tag self">Self</span> = keeper • <span class="tag gift">Gift</span> = packs well for gifts</p>
+  </div>
+
+  <div class="anchor"><strong>📍 Anchor:</strong> Town Hall Square (Raekoja plats), Old Town. All shops within 2–8 min walk. Most are along Pikk, Vene, or Müürivahe streets.</div>
+
+  <div class="item">
+    <div class="item-header"><h2>Handknit wool mittens (kindad)</h2><span class="price">€20–35</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Estonia's signature craft. Traditional patterns vary by region — flowers, reindeer, geometric motifs each have meaning. Far warmer and more characterful than anything in a chain store. Mittens (not gloves) are the most distinctively Estonian. Look for the Estonian Handicraft Union label.</p>
+    <div class="location">
+      <strong>Müürivahe Wool Market (Knitters' Wall)</strong> · ~3 min from Town Hall Square
+      <div class="walk">Outdoor stalls along the medieval town wall on Müürivahe street. Tallinn's best-known craft spot. Cash easier than card.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Juniper wood kitchenware</h2><span class="price">€10–25</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Spoons, trivets, cutting boards, small bowls. Estonian juniper (kadakas) smells incredible when warmed — put a hot pot on a juniper trivet and the kitchen fills with forest smell. Durable, lasts decades, distinctive, and you won't find it elsewhere.</p>
+    <div class="location">
+      <strong>Masters' Courtyard (Meistrite Hoov) — Vene 6</strong> · ~3 min from Town Hall Square
+      <div class="walk">Daily 10–18 (Wed until 22). Tucked-away courtyard with multiple craft workshops. Look for "Puu ja Putuka Pood" (Wood and Bug Shop) for woodcraft.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Linen tea towel or scarf</h2><span class="price">€15–30</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Flax was once called "Estonian gold." Modern Estonian linen comes in clean Nordic patterns and natural undyed colors. A tea towel or small scarf travels flat and lasts forever — linen actually improves with washing.</p>
+    <div class="location">
+      <strong>Domus Linum — Müürivahe 29</strong> · ~5 min from Town Hall Square
+      <div class="walk">Daily 10–18. Specialist linen shop near the Wool Market. Owner speaks English, knowledgeable about origins.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Estonian Handicraft House selection</h2><span class="price">€10–40</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Estonian Folk Art and Craft Union shop — one-stop for genuinely Estonian-made items with the authentic handicraft label. Wool socks, wooden utensils, embroidered accessories, small toys. The reliability of provenance is the real value here.</p>
+    <div class="location">
+      <strong>Eesti Käsitöö "Kaarmann" — Vanaturu kael 8</strong> · 1 min from Town Hall Square
+      <div class="walk">Mon–Sat 11–19, Sun 11–18. Right next to the Town Hall.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Estonian designer jewelry</h2><span class="price">€25–40</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Contemporary jewelry by Estonian designers — minimalist Nordic style, often in oxidized silver, copper, or wood. A-Galerii represents ~80 artists in one space; even at the budget end you get something unique rather than mass-produced. Doubles as a small free gallery.</p>
+    <div class="location">
+      <strong>A-Galerii — Hobusepea 2 / Pikk 27</strong> · ~5 min from Town Hall Square
+      <div class="walk">Mon–Fri 10–18, Sat 11–16, <strong>closed Sunday</strong>. Historic 1891 goldsmith's building.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Handmade soap & natural cosmetics</h2><span class="price">€8–20</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Estonia has a real natural-cosmetics scene — brands like Joik Organic and Nurme use Baltic herbs, sea salt, birch, and juniper. Soap bars, lip balms, and small candles all fit budget and luggage. Good filler gifts.</p>
+    <div class="location">
+      <strong>Eesti Käsitöö "Kaarmann" or Masters' Courtyard</strong> · 1–3 min
+      <div class="walk">Joik Organic also has its own shop at Tatari 64, ~15 min walk from Old Town.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Reval Candles</h2><span class="price">€10–25</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Hand-poured candles named after Estonia's landscapes — coastal pine, forest moss, juniper, sea air. Distinctive scents, attractive packaging. The kind of thing parents and dorm-friends actually appreciate.</p>
+    <div class="location">
+      <strong>Found in handicraft shops around Old Town</strong>
+      <div class="walk">Easiest: Eesti Käsitöö Kaarmann or specialist shops along Pikk street.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Soviet-era pins & coins (antique)</h2><span class="price">€2–15</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Authentic Soviet pins, badges, military insignia, and pre-1991 coins. Genuinely historical, very small, and unique to Baltic capitals. Good for history-minded students. Tallinn's antique shops have far more of this than Helsinki or Stockholm.</p>
+    <div class="location">
+      <strong>Antique shops along Pikk and Vene streets</strong> · 3–5 min from Town Hall Square
+      <div class="walk">Verify it's genuinely Soviet-era, not modern reproductions. Many small shops; browse a few.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Handmade ceramics (small bowls/cups)</h2><span class="price">€15–35</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Several small potters work directly out of Masters' Courtyard. Hand-thrown, glazed in Nordic blues, greens, and earth tones. Watching them work is part of the experience. Small pieces fit budget and luggage.</p>
+    <div class="location">
+      <strong>Masters' Courtyard (Meistrite Hoov) — Vene 6</strong> · ~3 min
+      <div class="walk">Same courtyard as woodcraft. Multiple ceramic studios.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Postcards & Old Town prints</h2><span class="price">€1–10</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Skip the mass-produced racks; look for postcards by local illustrators showing medieval Tallinn in watercolor or linocut. A few euros each, great for letters home or framing on a dorm wall.</p>
+    <div class="location">
+      <strong>St. Catherine's Passage (Katariina käik)</strong> · ~4 min from Town Hall Square
+      <div class="walk">Narrow medieval lane with artisan workshops. Several illustrators sell prints directly.</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 One-route plan:</strong> From Town Hall Square head east on Vene → Masters' Courtyard → continue to St. Catherine's Passage → south to Müürivahe Wool Market → Domus Linum. Covers most of the list in ~30 minutes of walking, with shopping pauses.
+  </div>
+  <div class="avoid">
+    <strong>⚠️ Skip:</strong> "Baltic amber" jewelry — almost all amber is from Latvia or Lithuania, and much of what's sold cheaply in Tallinn shops is plastic. Matryoshka dolls — Russian, not Estonian, despite being everywhere. Generic "I ♥ Tallinn" merchandise at cruise-port shops near Viru Gate.
+  </div>
+</div>
+
+<!-- ============ STOCKHOLM PANEL ============ -->
+<div class="panel" id="stockholm">
+
+  <div class="city-intro">
+    <p><strong>Stockholm — Scandinavian design powerhouse.</strong> Strong in iconic mid-century and contemporary design (Designtorget, Iris Hantverk), Dala horses, traditional craft, and Sámi craft from the north. Your hotel is in Norrmalm — the modern central area — so the best shops are <em>closer than Gamla Stan</em>. Gamla Stan is a fun walk south but not the only option.</p>
+    <p><strong>Note on prices:</strong> Sweden uses kronor (SEK). €1 ≈ 11.5 SEK as of mid-2026, so €10–40 ≈ 115–460 SEK. Sweden is essentially cashless; cards work everywhere.</p>
+    <p><strong>Legend:</strong> <span class="tag self">Self</span> = keeper • <span class="tag gift">Gift</span> = packs well for gifts</p>
+  </div>
+
+  <div class="anchor"><strong>📍 Anchor:</strong> Scandic Grand Central, Kungsgatan 70. The shops below are organized by distance — Norrmalm picks (3–10 min walk) first, then Gamla Stan (~15 min walk south), then Djurgården museum shops (tram).</div>
+
+  <div class="item">
+    <div class="item-header"><h2>Iris Hantverk handmade brush</h2><span class="price">€15–35</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Wooden-handled brushes (dish, body, shoe, bath) handcrafted by visually impaired artisans — a 150-year-old Swedish tradition still active. Beautiful, weighty, intentional objects. The dish brush is the iconic one; small body or face brushes fit easily in luggage.</p>
+    <div class="location">
+      <strong>Iris Hantverk — Kungsgatan 55</strong> · ~3 min walk east on Kungsgatan
+      <div class="walk">Mon–Fri 10–18, Sat 10–15, <strong>closed Sunday</strong>. Literally on the same street as your hotel.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Designtorget small object</h2><span class="price">€15–40</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Curated Scandinavian design — kitchen tools, small home items, jewelry, accessories, all from Nordic designers. Great for students who want "Stockholm cool" without the folk-craft aesthetic. House-brand items at lower price points.</p>
+    <div class="location">
+      <strong>Designtorget — Sergelgatan 20</strong> · ~5 min walk south
+      <div class="walk">Mon–Fri 10–19, Sat 10–17, Sun 11–16. By Sergels Torg, right next to T-Centralen metro.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Happy Socks</h2><span class="price">€10–25</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Stockholm-founded brand that turned colorful socks into a global thing. Patterns range from neon dots to Dala horse motifs to kurbits (traditional Swedish folk painting). Cheap, light, packable, recognizably Swedish without being kitschy.</p>
+    <div class="location">
+      <strong>Happy Socks — Drottninggatan 70</strong> · ~5 min walk south
+      <div class="walk">Mon–Thu 11–19, Fri 10–19, Sat 10–18, Sun 11–17. Look for Swedish-edition prints.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Åhléns City — Swedish design floor</h2><span class="price">€10–40</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">The biggest Swedish department store, with a strong Swedish-design and homeware section. Good for one-stop browsing: textiles, ceramics, small kitchen tools, candles, cosmetics. Wide price range, good for students who want options.</p>
+    <div class="location">
+      <strong>Åhléns City — Klarabergsgatan 50</strong> · ~5 min walk south
+      <div class="walk">Mon–Fri 10–20, Sat 10–19, Sun 11–19. Open daily, longer hours — useful late-evening fallback.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Svensk Hemslöjd handicraft piece</h2><span class="price">€20–40</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">The Swedish Society for Handicraft's flagship store — small linens, knitted accessories, wooden objects, embroidery, all from active Swedish craftspeople with proper provenance. Higher quality than the Gamla Stan tourist shops, similar prices for small items.</p>
+    <div class="location">
+      <strong>Svensk Hemslöjd — Norrlandsgatan 20</strong> · ~6 min walk east
+      <div class="walk">Mon–Fri 10–18, Sat 11–16, <strong>closed Sunday</strong>. Combine with NK department store nearby.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Marius / Nordic knit accessory</h2><span class="price">€25–40</span></div>
+    <div class="tags"><span class="tag self">Self</span></div>
+    <p class="desc">Headbands, mittens, or wrist-warmers in classic Nordic snowflake/star patterns. Won't replace a sweater (those start at €150+), but knit accessories in budget territory carry the same aesthetic. Warm, durable, very Stockholm-winter.</p>
+    <div class="location">
+      <strong>Svensk Hemslöjd — Norrlandsgatan 20</strong> · ~6 min walk
+      <div class="walk">Also try Åhléns and NK for more affordable machine-knit versions.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>NK Stockholm — Swedish design section</h2><span class="price">€20–40</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Sweden's grand 1902 department store. Most of NK is luxury, but the homeware and Swedish-design sections have budget pieces — small Iittala/Kosta Boda glassware, design objects, and gourmet food hall items. Worth visiting just for the building (Art Nouveau, designed by Ferdinand Boberg).</p>
+    <div class="location">
+      <strong>NK — Hamngatan 18–20</strong> · ~8 min walk east
+      <div class="walk">Mon–Fri 10–19, Sat 10–18, Sun 11–17.</div>
+    </div>
+  </div>
+
+  <!-- GAMLA STAN SECTION -->
+  <div class="section-divider" style="background: linear-gradient(135deg, #5a4a35 0%, #3d3225 100%);">
+    <h3>🏰 Gamla Stan — worth the walk</h3>
+    <p>~15–18 min walk south, or 2 metro stops (T-Centralen → Gamla Stan, blue line). Two shops here are genuinely worth the detour even with closer options at the hotel.</p>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Small Dala horse (Dalahäst)</h2><span class="price">€15–35</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">The iconic painted wooden horse from Dalarna — Sweden's single most recognizable folk object. Skip the tiny cheap ones; a properly hand-painted small one (~10 cm) is the right balance of authentic and packable. Look for the "Nils Olsson" stamp or "Tillverkad i Sverige" (Made in Sweden) label.</p>
+    <div class="location">
+      <strong>Sól Handkraft — Köpmangatan 18, Gamla Stan</strong> · ~18 min walk or 2 metro stops
+      <div class="walk">Daily 11–19. Owner sources directly from Dalarna carvers, knows the story behind each piece. Best Dala horse selection in Stockholm.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Sámi craft (Duodji) item</h2><span class="price">€20–40</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Authentic craft from Sweden's indigenous Sámi people — small reindeer-antler buttons, leather bracelets with pewter-thread embroidery, or carved wooden objects. Buy only from shops that source directly; much of the price goes back to makers. Distinctive, ethical, and the most "northern Scandinavia" thing you can bring home.</p>
+    <div class="location">
+      <strong>Sól Handkraft — Köpmangatan 18, Gamla Stan</strong> · ~18 min walk or 2 metro stops
+      <div class="walk">Same shop as the Dala horses. Owner is particular about Duodji sourcing — ask, and you'll get the story.</div>
+    </div>
+  </div>
+
+  <!-- DJURGÅRDEN SECTION -->
+  <div class="section-divider" style="background: linear-gradient(135deg, #2d4a4a 0%, #1d3a3a 100%);">
+    <h3>🎵 Djurgården museum shops — combine with a museum day</h3>
+    <p>Tram 7 from Sergels Torg or Kungsträdgården, ~15 min. Don't make a special trip for the shops — but if anyone's doing the ABBA Museum, Vasa, or Skansen, the gift shops are good.</p>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>ABBA Museum merchandise</h2><span class="price">€10–35</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Properly licensed shirts, tote bags, vinyl reissues, pins, and posters — not the bootleg versions sold elsewhere. The vinyl reissues at the low end are genuinely cool gifts. Free to enter the shop without museum tickets.</p>
+    <div class="location">
+      <strong>ABBA Museum Shop — Djurgårdsvägen 68</strong> · Tram 7
+      <div class="walk">Combine with Vasa Museum (next door) or Skansen.</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Skansen Museum shop crafts</h2><span class="price">€10–40</span></div>
+    <div class="tags"><span class="tag self">Self</span><span class="tag gift">Gift</span></div>
+    <p class="desc">Skansen — the world's oldest open-air museum — has a shop with traditional Swedish crafts: wooden butter knives, embroidered ribbons, candle holders, small ceramics. Less curated than Iris Hantverk but cheaper, and the museum itself is worth a day.</p>
+    <div class="location">
+      <strong>Skansenbutiken — Djurgårdsslätten 49</strong> · Tram 7
+      <div class="walk">Daily 11–16. Inside Skansen — museum entry not required for the shop itself.</div>
+    </div>
+  </div>
+
+  <!-- VINTAGE -->
+  <div class="section-divider" style="background: linear-gradient(135deg, #4a2d4a 0%, #3a1d3a 100%);">
+    <h3>♻️ For the fashion-minded: Stockholm second-hand</h3>
+    <p>Sweden's vintage scene is exceptional. Worth a half-day if any students care about fashion.</p>
+  </div>
+
+  <div class="item">
+    <div class="item-header"><h2>Vintage / second-hand find</h2><span class="price">€10–40</span></div>
+    <div class="tags"><span class="tag self">Self</span></div>
+    <p class="desc">Vintage Scandinavian denim, oversized wool sweaters, leather bags, old jewelry. Better than buying new for fashion-minded students. SOFO neighborhood on Södermalm has the densest concentration; Beyond Retro on Drottninggatan is the easy starter.</p>
+    <div class="location">
+      <strong>Beyond Retro — Drottninggatan 77</strong> · ~8 min walk south
+      <div class="walk">Daily 11–19. For deeper hunting, take the metro to Medborgarplatsen for SOFO.</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 One-route plan from the hotel:</strong> Walk east on Kungsgatan to Iris Hantverk (3 min) → south to Drottninggatan for Happy Socks (5 min) and Beyond Retro (8 min) → cut east to Svensk Hemslöjd and NK (6–8 min) → south to Designtorget and Åhléns (5 min). That's all the Norrmalm picks in under an hour of walking. Save Gamla Stan and Djurgården for separate excursions.
+  </div>
+  <div class="tip">
+    <strong>📍 Hotel advantage:</strong> Your hotel sits right at the center of Stockholm's main shopping streets — Kungsgatan, Drottninggatan, and Hamngatan all radiate from within 5 minutes. Students can easily duck out between meetings or museum visits without making it a "shopping day."
+  </div>
+  <div class="avoid">
+    <strong>⚠️ Skip:</strong> €5 plastic Viking helmets at airport and Gamla Stan tourist traps; mass-produced Dala horses with "Made in China" stickers (they exist — flip them over and check); "amber" jewelry (mostly Baltic, often fake); candy shops selling "Swedish fish" at 5× supermarket prices.
+  </div>
+</div>
+
+</main>
+
+<footer>
+  Walking times are approximate. Shop hours change seasonally — verify before going. Most Swedish and Finnish shops are closed or have reduced hours on Sundays; Tallinn is the most consistent for 7-day opening.
+</footer>
+
+<script>
+function showPanel(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelector('.tab[data-panel="' + name + '"]').classList.add('active');
+  document.getElementById(name).classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+
+</body>
+</html>
